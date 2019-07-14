@@ -39,7 +39,8 @@ class ProkerController extends Controller
                     //        'view_url'          => route('proker.show', $proker->id),
                     //         'confirm_message'    => 'Yakin mau menghapus ' . $proker->keterangan . '?'
                     //     ]);
-                    // })->addColumn('progress', function($proker) {
+                    // })
+                    ->addColumn('progress', function($proker) {
                         $logs = Logbook::where('proker_id',$proker->id)->get();
                         $sum = 0;
                         foreach ($logs as $log) {
