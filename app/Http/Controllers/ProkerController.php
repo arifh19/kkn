@@ -59,8 +59,8 @@ class ProkerController extends Controller
                 ->addColumn(['data' => 'klaster.nama', 'name' => 'klaster.nama', 'title' => 'Klaster'])
                 ->addColumn(['data' => 'progress', 'name' => 'progress', 'title' => 'Progress'])
                 //->addColumn(['data' => 'user.name', 'name' => 'user_id', 'title' => 'Nama Tim'])
-                ->addColumn(['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Tanggal Input'])
-                ->addColumn(['data' => 'action', 'name' => 'action', 'title' => 'Action']);
+                ->addColumn(['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Tanggal Input']);
+               // ->addColumn(['data' => 'action', 'name' => 'action', 'title' => 'Action']);
 
             return view('proker.index')->with(compact('html'));
 
