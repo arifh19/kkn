@@ -1,0 +1,9 @@
+@if($roles->role_id==1)
+Admin
+@elseif($roles->role_id==4)
+Staff
+@elseif($roles->role_id==3)
+Dosen
+@elseif($roles->role_id==2)
+Mahasiswa
+@endif
