@@ -15,7 +15,7 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Dokumentasi: </label></br>
-                    <img src="{{ asset('/dokumentasi/'.$model->dokumentasi) }}" width="200" height="200" />
+                    <img src="{{ asset('/dokumentasi/'.$model->dokumentasi) }}" />
                 </div>
             </div>
             <div class="modal-footer">
