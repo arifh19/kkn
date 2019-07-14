@@ -13,10 +13,10 @@
               <h4 class="modal-title">Dokumentasi</h4>
             </div>
             <div class="modal-body">
-                {{-- <div class="form-group">
+                <div class="form-group">
                     <label>Dokumentasi: </label></br>
-                    <img src="{{ asset('/dokumentasi/'+$model->dokumentasi) }}" width="200" height="200" />
-                </div> --}}
+                    <img src="{{ asset('/dokumentasi/'.$model->dokumentasi) }}" width="200" height="200" />
+                </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
