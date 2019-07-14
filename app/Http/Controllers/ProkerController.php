@@ -11,6 +11,10 @@ use Yajra\Datatables\Datatables;
 
 class ProkerController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -22,31 +26,35 @@ class ProkerController extends Controller
                 $prokers = Proker::with('jenis')->with('klaster')->with('user')->where('user_id', Auth::user()->id)->get();
 
                 return Datatables::of($prokers)
-                     ->addColumn('action', function($proker) {
-                       //  return view('datatable._waktu', [
-                           // 'model'             => $proker,
-                //            'form_url'          => route('proposalz.destroy', $proposal->id),
-                //            'edit_url'          => route('proposalz.edit', $proposal->id),
-                //            'view_url'          => route('proposalz.show', $proposal->id),
-                //             'confirm_message'    => 'Yakin mau menghapus ' . $proposal->judul . '?'
-                     //    ]);
-                        })
-                    ->addColumn('progress', function($proker) {
+                     ->addColumn('jam', function($proker) {
+                        return view('datatable._waktu', [
+                           'model'             => $proker,
+                        ]);
+                    })
+                    ->addColumn('action', function($proker) {
+                        return view('datatable._action', [
+                           'model'             => $proker,
+                           'form_url'          => route('proker.destroy', $proker->id),
+                           'edit_url'          => route('proker.edit', $proker->id),
+                           'view_url'          => route('proker.show', $proker->id),
+                            'confirm_message'    => 'Yakin mau menghapus ' . $proker->keterangan . '?'
+                        ]);
+                    })->addColumn('progress', function($proker) {
                         $logs = Logbook::where('proker_id',$proker->id)->get();
                         $sum = 0;
                         foreach ($logs as $log) {
-                            $sum +=$log;
+                            $sum +=$log->waktu;
                         }
-                        return view('datatable._waktu', [
+                        return view('datatable._progress', [
                            'model'             => $proker,
                            'sum'             => $sum,
                         ]);
-                    })->rawColumns(['action','progress'])->make(true);
+                    })->rawColumns(['jam','progress','action'])->make(true);
             }
 
             $html = $htmlBuilder
                 ->addColumn(['data' => 'nama', 'name' => 'nama', 'title' => 'Nama Proker'])
-                ->addColumn(['data' => 'waktu', 'name' => 'waktu', 'title' => 'Alokasi Waktu'])
+                ->addColumn(['data' => 'jam', 'name' => 'jam', 'title' => 'Alokasi Waktu'])
                 ->addColumn(['data' => 'jenis.nama', 'name' => 'jenis.nama', 'title' => 'Jenis Proker'])
                 ->addColumn(['data' => 'klaster.nama', 'name' => 'klaster.nama', 'title' => 'Klaster'])
                 ->addColumn(['data' => 'progress', 'name' => 'progress', 'title' => 'Progress'])
@@ -85,6 +93,8 @@ class ProkerController extends Controller
         $proker->user_id = $user;
 
         $proker->save();
+        return redirect()->route('proker.index');
+
     }
 
     /**

@@ -41,13 +41,19 @@ Program Kerja
 @section('scripts')
 <script>
         $("#jenis").change(function(){
-            $.ajax({
-                url: "{{ route('log.prokers') }}?jenis_id=" + $(this).val(),
-                method: 'GET',
-                success: function(data) {
-                    $('#proker').html(data.html);
-                }
-            });
+            if($(this).val()==1||$(this).val()==2){
+                $.ajax({
+                    url: "{{ route('log.prokers') }}?jenis_id=" + $(this).val(),
+                    method: 'GET',
+                    success: function(data) {
+                        $('#prokers').show();
+                        $('#proker').html(data.html);
+                    }
+                });
+            }else{
+                $('#prokers').hide();
+            }
+
         });
     var timepicker = new TimePicker('time', {
     lang: 'en',

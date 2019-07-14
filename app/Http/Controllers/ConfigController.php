@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Auth;
 
 class ConfigController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -46,6 +50,8 @@ class ConfigController extends Controller
         $config->user_id = $user;
 
         $config->save();
+        return redirect()->route('config.create');
+
 
     }
 

@@ -5,7 +5,7 @@
         {!! Form::select('jenis_id', App\Jenis::pluck('nama','id')->all(), null, ['id'=>'jenis', 'class' => 'form-control js-select2','placeholder'=>'','required']) !!}
         {!! $errors->first('jenis_id', '<p class="help-block">:message</p>') !!}
     </div>
-    <div class="form-group has-feedback{{ $errors->has('proker_id') ? ' has-error' : '' }}">
+    <div id="prokers" class="form-group has-feedback{{ $errors->has('proker_id') ? ' has-error' : '' }}">
         {!! Form::label('proker_id', 'Nama Proker') !!}
         <select name="proker_id" id="proker" class ="form-control js-select2">
             <option value="" disabled>Pilih Proker</option>
@@ -13,7 +13,7 @@
         {!! $errors->first('proker_id', '<p class="help-block">:message</p>') !!}
     </div>
     <div class="form-group has-feedback{{ $errors->has('keterangan') ? ' has-error' : '' }}">
-        {!! Form::label('keterangan', 'Rincian Program Kerja') !!}
+        {!! Form::label('keterangan', 'Uraian Program Kerja') !!}
 
         {!! Form::text('keterangan', null, ['class' => 'form-control', 'placeholder' => 'Rincian Program Kerja','required']) !!}
         {!! $errors->first('keterangan', '<p class="help-block">:message</p>') !!}
@@ -33,7 +33,7 @@
     <div class="form-group has-feedback{{ $errors->has('upload') ? ' has-error' : '' }}">
         {!! Form::label('dokumentasi', 'Dokumentasi') !!}
 
-        {!! Form::file('dokumentasi',['class' => 'form-control','required']) !!}
+        {!! Form::file('dokumentasi',['class' => 'form-control']) !!}
         <p class="help-block">Size file (PDF) maks 2MB</p>
         {!! $errors->first('dokumentasi', '<p class="help-block">:message</p>') !!}
     </div>

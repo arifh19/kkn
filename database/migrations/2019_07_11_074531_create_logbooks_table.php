@@ -16,12 +16,12 @@ class CreateLogbooksTable extends Migration
         Schema::create('logbooks', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('jenis_id');
-            $table->unsignedInteger('proker_id');
+            $table->unsignedInteger('proker_id')->nullable();
             $table->string('keterangan');
             $table->integer('waktu');
             $table->string('mulai');
             $table->string('selesai');
-            $table->string('dokumentasi');
+            $table->string('dokumentasi')->nullable();
             $table->unsignedInteger('user_id');
             $table->timestamps();
 

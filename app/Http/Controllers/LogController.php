@@ -8,9 +8,16 @@ use Yajra\DataTables\Html\Builder;
 use Yajra\Datatables\Datatables;
 use App\Logbook;
 use App\Proker;
+use Illuminate\Support\Facades\File;
+use Session;
+
 
 class LogController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function get_proker(Request $request)
     {
 
@@ -40,19 +47,23 @@ class LogController extends Controller
     public function index(Request $request, Builder $htmlBuilder)
     {
              if ($request->ajax()) {
-                $logs = Logbook::with('jenis')->with('proker')->with('user')->where('user_id', Auth::user()->id)->get();
+                $logs = Logbook::with('jenis')->with('proker')->with('user')->where('user_id', Auth::user()->id)->orderBy('updated_at','desc')->get();
 
                 return Datatables::of($logs)
-                //      ->addColumn('', function($proker) {
-                //        //  return view('datatable._waktu', [
-                //            // 'model'             => $proker,
-                // //            'form_url'          => route('proposalz.destroy', $proposal->id),
-                // //            'edit_url'          => route('proposalz.edit', $proposal->id),
-                // //            'view_url'          => route('proposalz.show', $proposal->id),
-                // //             'confirm_message'    => 'Yakin mau menghapus ' . $proposal->judul . '?'
-                //      //    ]);
-                //  })
-                ->make(true);
+                     ->addColumn('action', function($log) {
+                        return view('datatable._action', [
+                           'model'             => $log,
+                           'form_url'          => route('log.destroy', $log->id),
+                           'edit_url'          => route('log.edit', $log->id),
+                           'view_url'          => route('log.show', $log->id),
+                            'confirm_message'    => 'Yakin mau menghapus ' . $log->keterangan . '?'
+                        ]);
+                 })
+                ->addColumn('jam', function($log) {
+                    return view('datatable._waktu', [
+                       'model'             => $log,
+                    ]);
+                })->rawColumns(['jam','action'])->make(true);
             }
 
             $html = $htmlBuilder
@@ -60,11 +71,12 @@ class LogController extends Controller
                 ->addColumn(['data' => 'keterangan', 'name' => 'keterangan', 'title' => 'Rincian Proker'])
                 ->addColumn(['data' => 'proker.nama', 'name' => 'proker.nama', 'title' => 'Nama Proker'])
                 ->addColumn(['data' => 'jenis.nama', 'name' => 'jenis.nama', 'title' => 'Jenis Proker'])
-                ->addColumn(['data' => 'waktu', 'name' => 'waktu', 'title' => 'Waktu'])
+                ->addColumn(['data' => 'jam', 'name' => 'jam', 'title' => 'Waktu'])
                 ->addColumn(['data' => 'mulai', 'name' => 'mulai', 'title' => 'Mulai'])
                 ->addColumn(['data' => 'selesai', 'name' => 'selesai', 'title' => 'Selesai'])
                 //->addColumn(['data' => 'user.name', 'name' => 'user_id', 'title' => 'Nama Tim'])
-                ->addColumn(['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Tanggal Input']);
+                ->addColumn(['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Tanggal Input'])
+                ->addColumn(['data' => 'action', 'name' => 'action', 'title' => 'Action']);
 
             return view('log.index')->with(compact('html'));
 
@@ -98,7 +110,7 @@ class LogController extends Controller
         $mulai= strtotime($request->mulai);
         $selesai= strtotime($request->selesai);
         $selisih = $selesai-$mulai;
-        $log->waktu = $selisih / (60 * 60);
+        $log->waktu = number_format($selisih / (60 * 60),2);
 
         $log->user_id = $user;
         if ($request->hasFile('dokumentasi')) {
@@ -121,6 +133,8 @@ class LogController extends Controller
             $log->save();
         }
         $log->save();
+        return redirect()->route('log.index');
+
     }
 
     /**
@@ -163,8 +177,35 @@ class LogController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $log = Logbook::find($id);
+
+        $dokumentasi = $log->dokumentasi;
+
+        if (!$log->delete()) return redirect()->back();
+
+        // Handle hapus Proposal via ajax
+        if ($request->ajax()) return response()->json(['id' => $id]);
+
+        // Hapus Proposal lama, jika ada
+        if ($dokumentasi) {
+
+            $filepath = public_path() . DIRECTORY_SEPARATOR . 'dokumentasi' . DIRECTORY_SEPARATOR . $log->dokumentasi;
+
+            try {
+                File::delete($filepath);
+            } catch (FileNotFoundException $e) {
+                // File sudah dihapus/tidak ada
+            }
+        }
+
+        Session::flash("flash_notification", [
+            "level" => "success",
+            "icon" => "fa fa-check",
+            "message" => "Log berhasil dihapus"
+        ]);
+        return redirect()->route('log.index');
+
     }
 }

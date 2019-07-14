@@ -33,7 +33,7 @@
                     {{-- </p> --}}
                     <p><a class="btn btn-success" href="{{ route('proker.create') }}">Tambah</a></p>
 
-                    {!! $html->table(['class' => 'table w3-table-all']) !!}
+                    {!! $html->table(['class' => 'table w3-responsive w3-table-all']) !!}
                 </div>
                 <!-- /.box-body -->
             </div>
