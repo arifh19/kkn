@@ -42,7 +42,7 @@ class ProkerController extends Controller
                 ->addColumn(['data' => 'waktu', 'name' => 'waktu', 'title' => 'Alokasi Waktu'])
                 ->addColumn(['data' => 'jenis.nama', 'name' => 'jenis.nama', 'title' => 'Jenis Proker'])
                 ->addColumn(['data' => 'klaster.nama', 'name' => 'klaster.nama', 'title' => 'Klaster'])
-                //->addColumn(['data' => 'progress', 'name' => 'progress', 'title' => 'Progress'])
+                ->addColumn(['data' => 'progress', 'name' => 'progress', 'title' => 'Progress'])
                 //->addColumn(['data' => 'user.name', 'name' => 'user_id', 'title' => 'Nama Tim'])
                 ->addColumn(['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Tanggal Input'])
                 ->addColumn(['data' => 'action', 'name' => 'action', 'title' => 'Action']);
