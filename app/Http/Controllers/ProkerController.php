@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Proker;
+use App\Logbook;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Html\Builder;
 use Yajra\Datatables\Datatables;
@@ -31,8 +32,14 @@ class ProkerController extends Controller
                      //    ]);
                         })
                     ->addColumn('progress', function($proker) {
+                        $logs = Logbook::where('proker_id',$proker->id)->get();
+                        $sum = 0;
+                        foreach ($logs as $log) {
+                            $sum +=$log;
+                        }
                         return view('datatable._waktu', [
                            'model'             => $proker,
+                           'sum'             => $sum,
                         ]);
                     })->rawColumns(['action','progress'])->make(true);
             }
