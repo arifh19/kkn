@@ -71,6 +71,7 @@ class LogController extends Controller
                 ->addColumn(['data' => 'keterangan', 'name' => 'keterangan', 'title' => 'Rincian Proker'])
                 ->addColumn(['data' => 'proker.nama', 'name' => 'proker.nama', 'title' => 'Nama Proker'])
                 ->addColumn(['data' => 'jenis.nama', 'name' => 'jenis.nama', 'title' => 'Jenis Proker'])
+                ->addColumn(['data' => 'tanggal', 'name' => 'tanggal', 'title' => 'Tanggal'])
                 ->addColumn(['data' => 'jam', 'name' => 'jam', 'title' => 'Waktu'])
                 ->addColumn(['data' => 'mulai', 'name' => 'mulai', 'title' => 'Mulai'])
                 ->addColumn(['data' => 'selesai', 'name' => 'selesai', 'title' => 'Selesai'])
@@ -105,6 +106,7 @@ class LogController extends Controller
         $log->keterangan = $request->keterangan;
         $log->jenis_id = $request->jenis_id;
         $log->proker_id = $request->proker_id;
+        $log->tanggal = $request->tanggal;
         $log->mulai = $request->mulai;
         $log->selesai = $request->selesai;
         $mulai= strtotime($request->mulai);
@@ -124,11 +126,11 @@ class LogController extends Controller
             // Membuat nama file random berikut extension
             $filename = md5(time()) . "." . $extension;
 
-            // Menyimpan proposal ke folder public/proposal
+            // Menyimpan log ke folder public/log
             $destinationPath = public_path() . DIRECTORY_SEPARATOR . 'dokumentasi';
             $uploaded_upload->move($destinationPath, $filename);
 
-            // Mengisi field upload di tabel proposal dengan filename yang baru dibuat
+            // Mengisi field upload di tabel log dengan filename yang baru dibuat
             $log->dokumentasi = $filename;
             $log->save();
         }
@@ -156,7 +158,8 @@ class LogController extends Controller
      */
     public function edit($id)
     {
-        //
+        $log = Logbook::findOrfail($id);
+        return view('log.edit')->with(compact('log'));
     }
 
     /**
@@ -168,7 +171,46 @@ class LogController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = Auth::user()->id;
+        $log = Logbook::find($id);
+        $log->keterangan = $request->keterangan;
+        $log->jenis_id = $request->jenis_id;
+        $log->proker_id = $request->proker_id;
+        $log->tanggal = $request->tanggal;
+        $log->mulai = $request->mulai;
+        $log->selesai = $request->selesai;
+        $mulai= strtotime($request->mulai);
+        $selesai= strtotime($request->selesai);
+        $selisih = $selesai-$mulai;
+        $log->waktu = number_format($selisih / (60 * 60),2);
+        $log->user_id = $user;
+
+        if ($request->hasFile('dokumentasi')) {
+            // Mengambil log yang diupload berikut ektensinya
+            $filename = null;
+            $uploaded_upload = $request->file('dokumentasi');
+            $extension = $uploaded_upload->getClientOriginalExtension();
+            // Membuat nama file random dengan extension
+            $filename = md5(time()) . '.' . $extension;
+            // Menyimpan log ke folder public/log
+            $destinationPath = public_path() . DIRECTORY_SEPARATOR . 'dokumentasi';
+            $uploaded_upload->move($destinationPath, $filename);
+            // Hapus log lama, jika ada
+            if ($log->upload) {
+                $old_upload = $log->dokumentasi;
+                $filepath = public_path() . DIRECTORY_SEPARATOR . 'dokumentasi' . DIRECTORY_SEPARATOR . $log->dokumentasi;
+                try {
+                    File::delete($filepath);
+                } catch (FileNotFoundException $e) {
+                    // File sudah dihapus/tidak ada
+                }
+            }
+            // Ganti field log dengan log yang baru
+            $log->dokumentasi = $filename;
+            $log->save();
+        }
+        $log->save();
+        return redirect()->route('log.index');
     }
 
     /**
@@ -185,10 +227,10 @@ class LogController extends Controller
 
         if (!$log->delete()) return redirect()->back();
 
-        // Handle hapus Proposal via ajax
+        // Handle hapus log via ajax
         if ($request->ajax()) return response()->json(['id' => $id]);
 
-        // Hapus Proposal lama, jika ada
+        // Hapus log lama, jika ada
         if ($dokumentasi) {
 
             $filepath = public_path() . DIRECTORY_SEPARATOR . 'dokumentasi' . DIRECTORY_SEPARATOR . $log->dokumentasi;

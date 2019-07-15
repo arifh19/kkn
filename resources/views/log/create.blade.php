@@ -55,27 +55,13 @@ Program Kerja
             }
 
         });
-    var timepicker = new TimePicker('time', {
-    lang: 'en',
-    theme: 'light'
-    });
-    timepicker.on('change', function(evt) {
 
-        var value = (evt.hour || '00') + ':' + (evt.minute || '00');
-        evt.element.value = value;
+            $(function() {
+                $( "#datetimepicker" ).datepicker({
+                    format : "dd/mm/yyyy",
+                });
+              });
+       </script>
 
-    });
-    var timepicker2 = new TimePicker('time2', {
-    lang: 'en',
-    theme: 'light'
-    });
-    timepicker2.on('change', function(evt2) {
-
-        var value2 = (evt2.hour || '00') + ':' + (evt2.minute || '00');
-        evt2.element.value = value2;
-
-    });
-    $('#reservationtime').daterangepicker({ timePicker: true, timePickerIncrement: 30, locale: { format: 'MM/DD/YYYY hh:mm A' }})
-
-</script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.js"></script>
 @endsection

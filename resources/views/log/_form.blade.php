@@ -18,6 +18,12 @@
         {!! Form::text('keterangan', null, ['class' => 'form-control', 'placeholder' => 'Rincian Program Kerja','required']) !!}
         {!! $errors->first('keterangan', '<p class="help-block">:message</p>') !!}
     </div>
+    <div class="form-group has-feedback{{ $errors->has('tanggal') ? ' has-error' : '' }}">
+        {!! Form::label('tanggal', 'Tanggal') !!}
+
+        {!! Form::text('tanggal', null, ['class' => 'form-control', 'id' => "datetimepicker" , 'placeholder' => 'Tanggal','required']) !!}
+        {!! $errors->first('tanggal', '<p class="help-block">:message</p>') !!}
+    </div>
     <div class="form-group has-feedback{{ $errors->has('mulai') ? ' has-error' : '' }}">
         {!! Form::label('mulai', 'Mulai') !!}
 
