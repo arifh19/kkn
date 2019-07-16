@@ -2,6 +2,7 @@
     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default">
         Lihat
     </button>
+    <a class="btn btn-info" href="{{ $edit_url }}">Ubah</a>
     {!! Form::submit('Hapus', ['class' => 'btn btn-danger']) !!}
 {!! Form::close() !!}
 <html>
