@@ -52,9 +52,9 @@ class HomeController extends Controller
         }
 
         $pres_pt = number_format(($sum_pt/$maxpt)*100,2);
-        $pres_pn = number_format(($sum_pn/$maxpt)*100,2);
-        $pres_bt = number_format(($sum_bt/$maxpt)*100,2);
-        $pres_bn = number_format(($sum_bn/$maxpt)*100,2);
+        $pres_pn = number_format(($sum_pn/$maxpn)*100,2);
+        $pres_bt = number_format(($sum_bt/$maxbt)*100,2);
+        $pres_bn = number_format(($sum_bn/$maxbn)*100,2);
         $sum=$pres_pt+$pres_pn+$pres_bt+$pres_bn;
         return view('home')->with(compact('pres_pt','pres_pn','pres_bt','pres_bn','sum_pt','sum_pn','sum_bt','sum_bn','sum'));
     }
