@@ -29,3 +29,31 @@ Kategori
     </div>
     <!-- /.row -->
 @endsection
+
+@section('scripts')
+<script>
+        $("#jenis").change(function(){
+            if($(this).val()==1||$(this).val()==2){
+                $.ajax({
+                    url: "{{ route('log.prokers') }}?jenis_id=" + $(this).val(),
+                    method: 'GET',
+                    success: function(data) {
+                        $('#prokers').show();
+                        $('#proker').html(data.html);
+                    }
+                });
+            }else{
+                $('#prokers').hide();
+            }
+
+        });
+
+            $(function() {
+                $( "#datetimepicker" ).datepicker({
+                    format : "dd/mm/yyyy",
+                });
+              });
+       </script>
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.js"></script>
+@endsection
