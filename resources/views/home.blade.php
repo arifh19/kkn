@@ -32,7 +32,7 @@
 
             <div class="info-box-content">
               <span class="info-box-text"><strong>Pokok Tema</strong></span>
-            <span class="info-box-number">{{$sum_pt}} Jam</span>
+            <span class="info-box-number">{{number_format($sum_pt,2)}} Jam</span>
 
               <div class="progress">
                 <div class="progress-bar" style="width: {{$pres_pt}}%"></div>
@@ -54,7 +54,7 @@
 
             <div class="info-box-content">
               <span class="info-box-text"><strong>Pokok Non Tema</strong></span>
-            <span class="info-box-number">{{$sum_pn}} Jam</span>
+            <span class="info-box-number">{{number_format($sum_pn,2)}} Jam</span>
 
               <div class="progress">
                 <div class="progress-bar" style="width: {{$pres_pn}}%"></div>
@@ -79,7 +79,7 @@
 
             <div class="info-box-content">
               <span class="info-box-text"><strong>Bantu Tema</strong></span>
-            <span class="info-box-number">{{$sum_bt}} Jam</span>
+            <span class="info-box-number">{{number_format($sum_bt,2)}} Jam</span>
 
               <div class="progress">
                 <div class="progress-bar" style="width: {{$pres_bt}}%"></div>
@@ -100,7 +100,7 @@
 
             <div class="info-box-content">
               <span class="info-box-text"><strong>Bantu Non Tema</strong></span>
-            <span class="info-box-number">{{$sum_bn}} Jam</span>
+            <span class="info-box-number">{{number_format($sum_bn,2)}} Jam</span>
 
               <div class="progress">
                 <div class="progress-bar" style="width: {{$pres_bn}}%"></div>

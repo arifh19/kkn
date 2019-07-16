@@ -63,13 +63,18 @@ class LogController extends Controller
                     return view('datatable._waktu', [
                        'model'             => $log,
                     ]);
-                })->rawColumns(['jam','action'])->make(true);
+                })
+                ->addColumn('nama', function($log) {
+                    return view('datatable._proker', [
+                       'model'             => $log,
+                    ]);
+                })->rawColumns(['jam','action','nama'])->make(true);
             }
 
             $html = $htmlBuilder
                 // ->addColumn(['data' => 'tes', 'name' => 'tes', 'title' => 'Action'])
                 ->addColumn(['data' => 'keterangan', 'name' => 'keterangan', 'title' => 'Rincian Proker'])
-                ->addColumn(['data' => 'proker.nama', 'name' => 'proker.nama', 'title' => 'Nama Proker'])
+                ->addColumn(['data' => 'nama', 'name' => 'nama', 'title' => 'Nama Proker'])
                 ->addColumn(['data' => 'jenis.nama', 'name' => 'jenis.nama', 'title' => 'Jenis Proker'])
                 ->addColumn(['data' => 'tanggal', 'name' => 'tanggal', 'title' => 'Tanggal'])
                 ->addColumn(['data' => 'jam', 'name' => 'jam', 'title' => 'Waktu'])
