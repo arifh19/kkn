@@ -7,7 +7,7 @@
     </div>
     <div id="prokers" class="form-group has-feedback{{ $errors->has('proker_id') ? ' has-error' : '' }}">
         {!! Form::label('proker_id', 'Nama Proker') !!}
-    <select name="proker_id" id="proker" class ="form-control js-select2" value="{{$model->proker_id}}">
+    <select name="proker_id" id="proker" class ="form-control js-select2" value="{{$log->proker_id}}">
             <option value="" disabled>Pilih Proker</option>
         </select>
         {!! $errors->first('proker_id', '<p class="help-block">:message</p>') !!}
