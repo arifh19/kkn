@@ -47,7 +47,7 @@ class LogController extends Controller
     public function index(Request $request, Builder $htmlBuilder)
     {
              if ($request->ajax()) {
-                $logs = Logbook::with('jenis')->with('proker')->with('user')->where('user_id', Auth::user()->id)->orderBy('tanggal','desc')->get();
+                $logs = Logbook::with('jenis')->with('proker')->with('user')->where('user_id', Auth::user()->id)->orderBy('tanggal','asc')->get();
 
                 return Datatables::of($logs)
                      ->addColumn('action', function($log) {
