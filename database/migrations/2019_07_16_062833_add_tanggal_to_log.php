@@ -14,7 +14,7 @@ class AddTanggalToLog extends Migration
     public function up()
     {
         Schema::table('logbooks', function (Blueprint $table) {
-            $table->timestamp('tanggal')->after('keterangan')->nullable();
+            $table->string('tanggal')->after('keterangan')->nullable();
         });
     }
 
