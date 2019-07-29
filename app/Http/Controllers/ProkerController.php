@@ -140,7 +140,12 @@ class ProkerController extends Controller
         $proker->klaster_id = $request->klaster_id;
         $proker->user_id = $user;
 
+        $logs = Logbook::where('proker_id', $proker->id)->get();
+        foreach ($logs as $log) {
+            $log->jenis_id = $request->jenis_id;
+        }
         $proker->save();
+        $logs->save();
         return redirect()->route('proker.index');
     }
 
