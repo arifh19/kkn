@@ -21,6 +21,8 @@ Kategori
                 <!-- /.box-header -->
                 {!! Form::model($log, ['url' => route('log.update', $log->id), 'method' => 'put', 'files' => 'true']) !!}
                     @include('log._form')
+                    <input id="help" type="text" value="{{$log->proker_id}}" hidden>
+
                 {!! Form::close() !!}
             </div>
             <!-- /.box -->
