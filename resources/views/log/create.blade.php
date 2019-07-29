@@ -7,7 +7,7 @@ Program Kerja
 
 @section('breadcrumb')
     <li><a href="{{ url('home') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-    <li><a href="{{ url('/proker') }}">Proker</a></li>
+    <li><a href="{{ url('/log') }}">Proker</a></li>
     <li class="active">Tambah Log Proker</li>
 @endsection
 

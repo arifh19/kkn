@@ -8,6 +8,8 @@ use App\Logbook;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Html\Builder;
 use Yajra\Datatables\Datatables;
+use Session;
+
 
 class ProkerController extends Controller
 {
@@ -31,15 +33,15 @@ class ProkerController extends Controller
                            'model'             => $proker,
                         ]);
                     })
-                    // ->addColumn('action', function($proker) {
-                    //     return view('datatable._action', [
-                    //        'model'             => $proker,
-                    //        'form_url'          => route('proker.destroy', $proker->id),
-                    //        'edit_url'          => route('proker.edit', $proker->id),
-                    //        'view_url'          => route('proker.show', $proker->id),
-                    //         'confirm_message'    => 'Yakin mau menghapus ' . $proker->keterangan . '?'
-                    //     ]);
-                    // })
+                    ->addColumn('action', function($proker) {
+                        return view('datatable._actionProker', [
+                           'model'             => $proker,
+                           'form_url'          => route('proker.destroy', $proker->id),
+                           'edit_url'          => route('proker.edit', $proker->id),
+                           'view_url'          => route('proker.show', $proker->id),
+                            'confirm_message'    => 'Yakin mau menghapus ' . $proker->keterangan . '?'
+                        ]);
+                    })
                     ->addColumn('progress', function($proker) {
                         $logs = Logbook::where('proker_id',$proker->id)->get();
                         $sum = 0;
@@ -60,8 +62,8 @@ class ProkerController extends Controller
                 ->addColumn(['data' => 'klaster.nama', 'name' => 'klaster.nama', 'title' => 'Klaster'])
                 ->addColumn(['data' => 'progress', 'name' => 'progress', 'title' => 'Progress'])
                 //->addColumn(['data' => 'user.name', 'name' => 'user_id', 'title' => 'Nama Tim'])
-                ->addColumn(['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Tanggal Input']);
-               // ->addColumn(['data' => 'action', 'name' => 'action', 'title' => 'Action']);
+                ->addColumn(['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Tanggal Input'])
+                ->addColumn(['data' => 'action', 'name' => 'action', 'title' => 'Action']);
 
             return view('proker.index')->with(compact('html'));
 
@@ -117,7 +119,8 @@ class ProkerController extends Controller
      */
     public function edit($id)
     {
-        //
+        $proker = Proker::findOrfail($id);
+        return view('proker.edit')->with(compact('proker'));
     }
 
     /**
@@ -129,7 +132,16 @@ class ProkerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = Auth::user()->id;
+        $proker = Proker::find($id);
+        $proker->nama = $request->nama;
+        $proker->waktu = $request->waktu;
+        $proker->jenis_id = $request->jenis_id;
+        $proker->klaster_id = $request->klaster_id;
+        $proker->user_id = $user;
+
+        $proker->save();
+        return redirect()->route('proker.index');
     }
 
     /**
@@ -138,8 +150,21 @@ class ProkerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $proker = Proker::find($id);
+
+        if (!$proker->delete()) return redirect()->back();
+
+        // Handle hapus log via ajax
+        if ($request->ajax()) return response()->json(['id' => $id]);
+
+
+        Session::flash("flash_notification", [
+            "level" => "success",
+            "icon" => "fa fa-check",
+            "message" => "Proker berhasil dihapus"
+        ]);
+        return redirect()->route('proker.index');
     }
 }

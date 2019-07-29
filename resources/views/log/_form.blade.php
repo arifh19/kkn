@@ -43,6 +43,7 @@
         <p class="help-block">Size file (PDF) maks 2MB</p>
         {!! $errors->first('dokumentasi', '<p class="help-block">:message</p>') !!}
     </div>
+    <input id="help" type="text" value="{{$log->proker_id}}" hidden>
 
 
 </div>

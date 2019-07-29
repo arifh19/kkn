@@ -47,6 +47,22 @@ Kategori
             }
 
         });
+        $("#jenis").ready(function(){
+            if($("#jenis").val()==1||$("#jenis").val()==2){
+                $.ajax({
+                    url: "{{ route('log.prokers') }}?jenis_id=" + $("#jenis").val(),
+                    method: 'GET',
+                    success: function(data) {
+                        $('#prokers').show();
+                        $('#proker').html(data.html);
+                        $("#proker").find('option[value="'+$('#help').val()+'"]').attr('selected','selected')
+                    }
+                });
+            }else{
+                $('#prokers').hide();
+            }
+
+        });
 
             $(function() {
                 $( "#datetimepicker" ).datepicker({

@@ -82,7 +82,13 @@ class LogController extends Controller
                 ->addColumn(['data' => 'selesai', 'name' => 'selesai', 'title' => 'Selesai'])
                 //->addColumn(['data' => 'user.name', 'name' => 'user_id', 'title' => 'Nama Tim'])
                 ->addColumn(['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Tanggal Input'])
-                ->addColumn(['data' => 'action', 'name' => 'action', 'title' => 'Action']);
+                ->addColumn(['data' => 'action', 'name' => 'action', 'title' => 'Action'])
+                ->parameters([
+                    'order' => [
+                        3, // here is the column number
+                        'desc'
+                    ]
+               ]);
 
             return view('log.index')->with(compact('html'));
 
