@@ -1,12 +1,12 @@
 {!! Form::model($model, ['url' => $form_url, 'method' => 'delete', 'class' => 'form-inline js-confirm', 'data-confirm' => $confirm_message]) !!}
-    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default">
+<button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default{{$model->id}}">
         Lihat
     </button>
     <a class="btn btn-info" href="{{ $edit_url }}">Ubah</a>
     {!! Form::submit('Hapus', ['class' => 'btn btn-danger']) !!}
 {!! Form::close() !!}
 <html>
-<div class="modal fade" id="modal-default">
+<div class="modal fade" id="modal-default{{$model->id}}">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
